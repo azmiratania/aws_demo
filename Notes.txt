@@ -1,0 +1,328 @@
+******************************
+	  AWS IS SIMPLE :) 
+******************************
+
+Cloud Computing
+	Cloud computing is an on-demand delivery of IT resources over the internet, usually with pay-as-you-go pricing
+
+AWS Global Infrastructure
+	AWS data centers
+		Virutal tour of our data centers - https://aws.amazon.com/compliance/data-center/data-centers/
+	Availability Zone
+		Group one or more (AWS data centers)
+	Region
+		Group of 2 or more (Availability Zones)
+		- 4 factors when we are choosing our primary and secondary / any region to host our apps
+			1. Governance and legal requirements – Consider any legal requirements based on data governance, sovereignty, or privacy laws.
+			2. Latency – Close proximity to customers means better performance.
+			3. Service availability – Not all AWS services are available in all Regions.
+			4. Cost – Different Regions have different costs. Research the pricing for the services you plan to use and compare costs to make the best decision for your workloads.
+	Points of Presence / Edge Locations - Caching Servers / Servers used by our Content Delivery network services (CDN)
+		Storing repeatedly accessed data for faster uploads / downloads
+
+3 ways to interact with AWS
+	1. AWS Management Console -  Browser UI
+	2. Universal Command Line Interface for Amazon Web Services - https://github.com/aws/aws-cli
+	3. Tools to Build on AWS - https://aws.amazon.com/tools/
+
+AWS IAM
+	IAM is a managed service provided at no cost - FREE :)
+	What is it ?
+		- IAM is a web service that helps you securely control access to AWS resources. 
+	Why / When is it used ?
+		- Use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources.
+		- authentication and authorization
+	Important concepts / topics to keep in mind
+		- Principals
+			- IAM User Groups
+				- Group multiple AWS IAM users into a group
+				- They can have permissions to perform certain actions on AWS
+			- IAM User
+				- They are users inside an AWS account
+				- They can have permissions to perform certain actions on AWS
+				- Every AWS account is limited to create 5000 users (MAX).
+			- IAM Role
+				- User / Bot / Application when they use a role, (ASSUME a role)
+				- Temporary access for a specified amount of time
+				- Min. is 900 secs
+				- They can have permissions to perform certain actions on AWS
+			- Policy / Policies
+				- A document in JSON format which specifies the permission allowed
+				- You can assign this policy to users / user groups / roles / resources
+
+Computing on AWS
+	Virtual machines - Amazon EC2 (Elastic Compute Cloud)
+		- Instances = Virtual machines / Servers
+		- AMI = It is a template which contains info. about OS. applications and services to run on your VM
+		- Instance Type = Types of hardware to choose for a specific business use case
+			- General Purpose:  Default – Diverse workloads, equal resource ratio
+				- Use cases 
+					- Websites and web applications
+					- Development environments
+					- Build servers 
+					- Code repositories
+					- Micro services
+					- Testing and staging environments
+			- Compute Optimized: Media Processing, HPC, Scientific Modelling, Gaming & Machine Learning
+				- Use cases
+					- High-performance web servers
+					- Scientific modelling 
+					- Batch processing
+					- Distributed analytics
+					- High-performance computing (HPC)
+					- Machine/deep learning inference
+					- AD serving
+					- Highly scalable multiplayer gaming
+					- Video encoding
+			- Memory Optmized: Processing Large in-memory datasets, some database workloads
+				- Use cases
+					- High-performance databases
+					- Data mining and analysis
+					- In-memory databases
+					- Distributed web scale in-memory caches
+					- Applications performing real-time processing of unstructured big data
+					- Hadoop/Spark clusters
+			- Accelerated Computing: Hardware GPU, Field Programmable Gate Arrays (FGPAs)
+				- Use cases
+					- Machine learning
+					- Deep learning
+					- High-performance computing
+					- Computational fluid dynamics
+					- Computational finance
+					- Seismic analysis
+					- Speech recognition
+					- Autonomous vehicles
+					- Drug discovery
+			- Storage Optimized: Sequential & Random IO – Scale Out transactional databases, DW, Elastic search, & analytics workloads
+				- Use cases
+					- Amazon EMR-based workloads
+					- Distributed file systems such as HDFS and MapR-FS, network file systems
+					- Log or data processing applications such as Apache Kafka 
+					- Big data workload clusters.
+			- EC2
+				- EC2 Instance Lifecycle
+	Containers
+		- AWS ECS - Docker
+			2 launch types
+			- ECS (Container) + EC2 (VM) launch type
+			- ECS (Container) + AWS Fargate launch type - Servereless mode
+		- AWS EKS - Kubernetes workloads
+			2 launch types
+			- EKS (Container) + EC2 (VM) launch type
+			- EKS (Container) + AWS Fargate launch type - Servereless mode
+	Serverless
+		- AWS Fargate - Run your containers in a serverless mode. Choose / point your container image and AWS will take care of the rest.
+		- AWS Lambda - You can choose a runtime and start writing your business logic in that prog. lang. and AWS will take care of the rest.
+
+
+Networking
+	Amazon VPC - Created to isolate your aws resources / servers / instances /nodes
+		- Every VPC is tied to a Region
+		- By default every region will have a default /16 VPC
+		- On top of it, you can create your own VPCs
+
+	Subnets - Created to subset your VPCs
+		- Every Subnet is tied to a single Availability Zone
+		- Formula to calculate the no of IP addresses ( 2^(32- x) - 5 )
+			Ex: CIDR block 10.0.0.0/24, the following five IP addresses are reserved:
+				- 10.0.0.0: Network address.
+				- 10.0.0.1: Reserved by AWS for the VPC router.
+				- 10.0.0.2: Reserved by AWS. The IP address of the DNS server is the base of the VPC network range plus two.
+				- 10.0.0.3: Reserved by AWS for future use.
+				- 10.0.0.255: Network broadcast address. We do not support broadcast in a VPC, therefore we reserve this address.
+		- 2 types of subnets
+			- Public subnets 
+				- Subnets which have access to internet via Internet Gateway*
+			- Private subnets
+				- Subnets which have outgoing only access to internet via NAT Gateways*
+
+	Components of a VPC
+		- Internet Gateway
+			- Provides incoming / outgoing access to internet and your VPC
+			- Fully managed AWS service
+			- Customers have no need to worry about scaling / availability
+
+		- NAT Gateways
+			- Provides outgoing only access to internet and your VPC
+			- Fully managed AWS service
+			- Customers have no need to worry about scaling / availability
+			- Should always be placed inside Public Subnet (so that it can have access to internet gateway)
+			- BUT it acts as a middleman for servers sending requests from inside a Private Subnet
+
+		- Route Tables
+			- A table which has entries to source and targets inside VPC
+			- A default route table is created automaticatlly every time a VPC is created
+			- Source can be any IP address CIDR range
+			- Targets can be any Gateway / Peering connections / Subnets
+
+Security in VPC
+		- Network ACLs (NACL)
+			- Stateless network firewalls, you can mention ALLOW / DENY rules
+			- Added at the subnet level
+			- By default all incoming and outgoing connections are allowed
+			- Each Rule can have a rule number 
+			- Rules are evaluated starting with the lowest numbered rule. As soon as a rule matches traffic, it's applied regardless of any higher-numbered rule that might contradict it
+			- NACL will check the incoming and outgoing IP packet every time it is trying to reach a subnet / go out from a subnet where it is applied on
+
+		- Security Groups
+			- Stateful network firewalls, you can only mention ALLOW rules
+			- Added around a VM / Instance / Server level
+			- By default all incoming connections are DENIED, need to ALLOW explicitly
+			- By default all outgoing connnections are ALLOWED
+			- It remembers the prev. ALLOW / DENY state for whenever a particular IP traffic was tryging to enter into the Security Group and by default ALLOWs if there is an outgoing traffic coming from the VM / Instance / Server 
+
+Storage on AWS
+	Block storage
+		Amazon EC2 Instance store - Data store is best used for ephemeral data storage use cases
+			- /tmp folders
+			- cache disks
+			- scratch disks
+			- ACCESS TO DATA SHOULD BE VERY FAST and it is okay if the storge is temp.
+		
+		Amazon EBS - Elastic Block Store
+			- Good for storing data presistently - It can presist data even through server shutdowns
+			- Volume types
+				SSD - Solid State Drives - (Access blocks of data randomly)
+					- General Purpose SSD (gp3, gp2): Provides a balance of price and performance for a wide variety of transactional workloads
+					- Provisioned IOPS SSD (io2 Block Express, io2, io1): Provides high-performance SSD designed for latency-sensitive transactional workloads
+				HDD - Hard-disk Drives - (Access blocks of data in a sequential manner)
+					- Throughput Optimized HDD (st1): A low-cost HDD designed for frequently accessed, throughput intensive workloads
+					- Cold HDD (sc1): The lowest cost HDD designed for less frequently accessed workloads
+			- Multi-attach EBS
+				LIMIT - 16 instances / servers / EC2 VMs can be connected to this volume type at once
+
+	File storage - If you need multiple hosts / servers to access the same file system at once
+		Amazon EFS - Linux OS
+		Amazon FSx - Windows OS
+		Amazon FSx Lustre - Windows OS + Lustre 
+
+
+	Object storage
+		Amazon S3 - Simple Storage Service = Object level storage, it's good for WORM workloads
+			- Write Once, Read Many times type of workloads	
+			- Provides 11 (9s) of data durability
+		- Bucket = A container that can store data, every Bucket is tied to a single region
+		- Object = Data that is stored inside a Bucket
+		- Permissions
+			- Owner Only (default)
+			- Public access (Enabled on the Console / CLI / SDK)
+			- Provide access to specific users
+				- Bucket Policies
+				- IAM Policies
+				- Bucket ACLs
+			- Multiple apps / bots / users access same bucket for diff. purposes
+				- Access Policies
+			- Supports
+		        - Versioning
+		        - Encryption
+		        - CORS - Cross Origin Resource Sharing
+		        - Lifecycle policies
+		        - Access points
+		        - Cross region replication
+		        - Static website hosting
+		        - Multi-part uploads feature
+	6 Storage classes - A single bucket can have objects each belonging to diff. storage class
+	        - Amazon S3 Standard (default) - Expensive type of storage class
+	        - Amazon S3 Standard Infreq. access - Good for data which is accessed less freq.
+	            - Economical than Amazon S3 Standard
+	        - Amazon S3 Standard One Zone Infreq. access - Stored only in a Single AZ
+	            - Storing data which is in-sensitve
+	            - Storing data which is less important
+	            - Economical than Amazon S3 Standard Infreq. access
+	        - Amazon S3 Glacier - Store files of bigger sizes and archival data
+	            - Economical than Amazon S3 Standard and is best to store archive data
+	            - .tar/.zip multiple files are compressed and archived
+	            - A single download request can be fulfilled b/w 3 - 5 hours
+	        - Amazon S3 Glacier Deep Archive
+	            - Economical than Amazon S3 Glacier
+	                - Best to store archive data (very in-freq accessed)
+	            - .tar/.zip multiple files are compressed and archived
+	            - Advantage - Lowest of all the storage classes
+	            - Disadvantage - Wait up to 12 hours to download data from this storage class
+	        - S3 Intelligent Tiering - Uses a ML based monitoring Algo which will monitor your data access patterns
+
+
+Databases
+	Managed and un-managed DB
+		Un-managed DB - The database engine it's patches and scaling -- taken care by user / customer
+		Managed DB - The database engine it's patches and scaling -- taken care by AWS
+			User has to only worry about DB Optimization
+
+		Types (Purpose built databases)
+			Relational
+				Traditional applications, ERP, CRM, e-commerce
+				Amazon RDS Amazon Redshift
+			Key-value
+				High-traffic web apps, e-commerce systems, gaming applications
+				Amazon DynamoDB
+			In-memory
+				Caching, session management, gaming leaderboards, geospatial applications
+				Amazon ElastiCache for Memcached Amazon ElastiCache for Redis Amazon MemoryDB for Redis
+			Document
+				Content management, catalogs, user profiles
+				Amazon DocumentDB (with MongoDB compatibility)
+			Wide column
+				High scale industrial apps for equipment maintenance, fleet management, and route optimization
+				Amazon Keyspaces (for Apache Cassandra)
+			Graph
+				Fraud detection, social networking, recommendation engines
+				Amazon Neptune
+			Time series
+				IoT applications, DevOps, industrial telemetry
+				Amazon Timestream
+			Ledger
+				Systems of record, supply chain, registrations, banking transactions
+				Amazon QLDB
+
+
+FOCUS
+	Relational
+		Amazon RDS
+			MySql
+			Mariab DB
+			Oracle DB
+			PostgresSQl
+			Microsoft SQL
+		Amazon Aurora
+			mysql	
+			postgresql
+	Non-Relational
+		DynamoDB
+
+Amazon CloudWatch - Monitoring service
+	- What is happening with my AWS resrouces / services
+	Features
+		- Metrics - CloudWatch Metrics are data about the performance of your systems. It represents a time-ordered set of data points that are published to CloudWatch. As new data points come in, data older than 15 months is dropped.
+		(By default CloudWatch can keep metrics records until 15 months)
+		- Logs
+		- Alarms
+		- Events - Replaced by Amazon EventBridge
+Amazon CloudTrail - Auditing tool
+	- Who is doing, whatever is happening with my AWS resrouces / services
+	- Who / which person is doing all the actions (person, bot, service)
+
+Load Balancing on AWS
+	4 types of load balancers
+		- Application Load Balancer - Load balancing for HTTP/HTTPS traffic, works on Network Layer 7
+		- Network Load Balancer - Load balances traffic on Network Layer 4, mainly balancing TCP/UDP/TLS traffic
+		- Gateway Load Balancer - Load balancing traffic across multiple Virtual Appliances,  it connects Internet Gateways, VPCs, and other network resources over a private connection. Your traffic flows over the AWS network, and data is never exposed to the internet. 
+		- Classic Load Balancer - DEPRECATED - We encourage customers to use the specific load balancer for balancing traffic for a specific use-case
+	Route 53 - AWS managed DNS web service to manage all of your domain DNS records and it's connections to endpoints both internal to AWS (alias AWS services) and external to AWS / servers / hosts which are not hosted on AWS
+	IAM - Web service that helps you securely control access to AWS resources. You use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources.
+
+Amazon EC2 Auto Scaling
+For Autoscaling to work, you need to answer these 7 questions
+	1. What type of servers and what servers do you need to automatically launch ?
+		a. Launch Templates
+	2. Where do you want me to automatically launch these servers ? - Which VPC and Subnet ?
+		a. Network tab inside the ASG create wizard
+	3. Do you want any preferences in pricing options of these EC2 instances which I launch automatically ?
+		a. Instance purchase options tab inside the ASG create wizard
+	4. I will launch several servers - who will distribute the traffic ?  Do you want Load Balancing ?
+		a. Load balancing tab inside the ASG create wizard
+	5. How many do you want (min, max, desired -- (first launch ASG)) ?
+		a. Configure group size and scaling policies tab inside the ASG create wizard
+	6. When do want me to launch ? Based on what factors do you want to launch ?
+		a. Scaling policies tab inside the ASG create wizard
+	7. Do you want to be notified whenever I add / remove servers ?
+		a. Notification tab inside the ASG create wizard
